@@ -32,24 +32,24 @@ const RateLimit = require('express-rate-limit');
 
 app.use(express.json());
 // extra packages
-app.set('trust proxy',1);
+app.set('trust proxy', 1);
 app.use(rateLimiter({
-  windowMs: 15*60*1000, //15min
-  max:100, //each IP have 100 req per windowMs
+  windowMs: 15 * 60 * 1000, //15min
+  max: 100, //each IP have 100 req per windowMs
 }))
 app.use(helmet())
 app.use(cors())
 app.use(xss())
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
   res.send('<h1>Jobs Api</h1> <a href ="/api-docs">Documentation</a>')
 })
 
-app.use('/api-docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // routes
-app.use('/api/v1/auth',authRouter)
-app.use('/api/v1/jobs',authenticateUser,jobsRouter);
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/jobs', authenticateUser, jobsRouter);
 
 // app.get('/', (req, res) => {
 //   res.send('jobs api');
@@ -62,7 +62,7 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI)
+    await connectDB(process.env.MONGO_URL)
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
